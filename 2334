@@ -1416,7 +1416,6 @@ chcp 65001 > nul
 
 Reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "AltTabSettings" /t REG_DWORD /d "0" /f
 
-ping ping-eu.ds.on.epicgames.com -n 25
 
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
 Powercfg -setactive scheme_current
