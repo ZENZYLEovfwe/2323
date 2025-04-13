@@ -1584,55 +1584,8 @@ chcp 437 > nul
 powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Select disable updates in wub, press ok to open it', 'Exm Tweaking Utility', 'Ok', [System.Windows.Forms.MessageBoxIcon]::Information);}"
 chcp 65001 > nul
 
-
-echo.                                                          %p%░██████╗░██████╗░██╗░░░██╗
-echo.                                                          %p%██╔════╝░██╔══██╗██║░░░██║
-echo.                                                          %p%██║░░██╗░██████╔╝██║░░░██║
-echo.                                                          %p%██║░░╚██╗██╔═══╝░██║░░░██║
-echo.                                                          %p%╚██████╔╝██║░░░░░╚██████╔╝
-echo.                                                          %p%░╚═════╝░╚═╝░░░░░░╚═════╝░
-echo.                        %b%"═══════════════════════════════════════════════════════════════════════════════════════════════" %w%
-echo                            Optimize GPU settings, only do general and the option where your gpu manufacturer is stated
-echo.
-echo.
-echo.                                            %p%[1]%w% General Gpu Tweaks     %p%[2]%w% Nvidia GPU tweaks
-echo.
-echo.                                            %p%[3]%w% Amd Gpu Tweaks         %p%[4]%w% Intel Gpu tweaks
-echo.
-echo.
-echo.                                                        Type "X" to go back to menu
-echo.
-echo.                        %b%"═══════════════════════════════════════════════════════════════════════════════════════════════"
-
-set /p input=:
-if /i %input% == 1 goto gengpu
-if /i %input% == 2 goto nvgpu
-if /i %input% == 3 goto amdgpu
-if /i %input% == 4 goto intelgpu
-if /i %input% == X cls & goto menu
-
-) ELSE (
-echo Invalid Input & goto MisspellRedirect
-
-:MisspellRedirect
-cls
-echo Misspell Detected
-timeout 2
-goto RedirectMenu
-
-
-:RedirectMenu
-cls
-goto :clean
-
-
-
-:gengpu
-echo Disable Gpu Scaling
 for /f %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /s /f Scaling') do set "str=%%i" & if "!str!" neq "!str:Configuration\=!" (
 	Reg.exe add "%%i" /v "Scaling" /t REG_DWORD /d "1" /f 
-)
-timeout /t 1 /nobreak > NUL
 
 
 
@@ -1648,7 +1601,7 @@ Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\System
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\DisplayPostProcessing" /v "Latency Sensitive" /t REG_SZ /d "True" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrLevel" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDebugMode" /t REG_DWORD /d "0" /f
-timeout /t 1 /nobreak > NUL
+
 
 
 echo Graphics card shedueler tweaks
@@ -1661,7 +1614,7 @@ Reg.exe add "HKLM\System\CurrentControlSet\Services\VxD\BIOS" /v "FastDRAM" /t R
 Reg.exe add "HKLM\System\CurrentControlSet\Services\VxD\BIOS" /v "PCIConcur" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers" /v TdrLevel /t REG_DWORD /d 0 /f
 Reg.exe add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers" /v TdrDelay /t REG_DWORD /d 60 /f
-timeout /t 1 /nobreak > NUL
+
 
 echo Disable Preemption
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnablePreemption" /t REG_DWORD /d "0" /f
@@ -1678,7 +1631,6 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "DisablePreemptionOnS3S4" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "ComputePreemptionLevel" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "DisablePreemption" /t REG_DWORD /d "1" /f
-timeout /t 1 /nobreak > NUL
 
 echo MSI Mode
 for /f %%n in ('wmic path win32_videocontroller get PNPDeviceID ^| findstr /L "VEN_"') do (
@@ -1686,14 +1638,14 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Enum\%%n\Device Parameters\Interrupt 
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Enum\%%n\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /t REG_DWORD /d "0" /f
 )
 
-timeout /t 1 /nobreak > NUL
+
 
 
 echo Disable GpuEnergyDrv
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\GpuEnergyDrv" /v "Start" /t REG_DWORD /d "4" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\GpuEnergyDr" /v "Start" /t REG_DWORD /d "4" /f
 
-timeout /t 1 /nobreak > NUL
+
 
 echo Latency Tolernace
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatency" /t REG_DWORD /d "1" /f
@@ -1784,8 +1736,7 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "Mo
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RMDisablePostL2Compression" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmDisableRegistryCaching" /t REG_DWORD /d "1" /f
-timeout /t 1 /nobreak > NUL
-timeout /t 1 /nobreak > NUL
+
 
 
 echo Vram
@@ -1793,94 +1744,9 @@ fsutil behavior query memoryusage
 fsutil behavior set memoryusage 2
 
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :gpu
-
-:nvgpu
-cls
-chcp 437 > nul
-powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('ONLY DO THESE IF YOU HAVE AN NVIDIA GPU', 'Exm Tweaking Utility', 'Ok', [System.Windows.Forms.MessageBoxIcon]::Information);}"
-chcp 65001 > nul
-cls
-:nv
-
-
-echo.
-echo.
-
-echo.                                                      %p%    ███╗░░██╗██╗░░░██╗██╗██████╗░██╗░█████╗░
-echo.                                                      %p%    ████╗░██║██║░░░██║██║██╔══██╗██║██╔══██╗
-echo.                                                      %p%    ██╔██╗██║╚██╗░██╔╝██║██║░░██║██║███████║
-echo.                                                      %p%    ██║╚████║░╚████╔╝░██║██║░░██║██║██╔══██║
-echo.                                                      %p%    ██║░╚███║░░╚██╔╝░░██║██████╔╝██║██║░░██║
-echo.                                                      %p%    ╚═╝░░╚══╝░░░╚═╝░░░╚═╝╚═════╝░╚═╝╚═╝░░╚═╝
-echo.                          %b%"════════════════════════════════════════════════════════════════════════════════════════════"%w%
-echo.                             Tweaking gpu settings will give a major fps increase, and a big decrease in gpu latency
-echo.
-echo.
-echo.                                         %p%[1]%w% Remove Nvidia Telemetry       %p%[2]%w% Disable Hidden Power Saving Features
-echo.
-echo.                                         %p%[3]%w% Nvidia Profile Inspector      %p%[4]%w% Enable Gpu P-States
-echo.
-echo.                                         %p%[5]%w% Enable Msi Mode and More      %p%[6]%w% Disable TDR
-echo.
-echo.                                         %p%[7]%w% Disable HDCP                  %p%[8]%w% Disable All Preemptions 
-echo.
-echo.                                         %p%[9]%w% Enable DPC'S for each Core    %p%[10]%w% Disable Write Combining
-echo.
-echo.                                         %p%[11]%w% Set Driver Acceleration      %p%[12]%w% Force Contigous Memory Allocation
-echo. 
-echo.                                         %p%[13]%w% Advanced Driver Debloat      %p%[14]%w% Advanced tweaks    
-echo.
-echo.                                         %p%[15]%w% Optimize PowerMizer          %p%[16]%w% Latency Tolernace
-echo.        
-echo.
-echo.                                                                Type "X" to go back to menu
-echo.
-echo.                          %b%"════════════════════════════════════════════════════════════════════════════════════════════"
-
-
-set /p input=:
-if /i %input% == 1 goto nv1
-if /i %input% == 2 goto nv2
-if /i %input% == 3 goto nv3
-if /i %input% == 4 goto nv4
-if /i %input% == 5 goto nv5
-if /i %input% == 6 goto nv6
-if /i %input% == 7 goto nv7
-if /i %input% == 8 goto nv8
-if /i %input% == 9 goto nv9
-if /i %input% == 10 goto nv10
-if /i %input% == 11 goto nv11
-if /i %input% == 12 goto nv12
-if /i %input% == 13 goto nv13
-if /i %input% == 14 goto nv14
-if /i %input% == 15 goto nv15
-if /i %input% == 16 goto nv16
-if /i %input% == X cls & goto menu
-) ELSE (
-echo Invalid Input & goto MisspellRedirect
-
-:MisspellRedirect
-cls
-echo Misspell Detected
-timeout 2
-goto RedirectMenu
 
 
 
-:RedirectMenu
-cls
-goto :nvidia
-
-:nv13
 rd /s /q "C:\Nvidia\Display.NView"
  
 rd /s /q "C:\Nvidia\Display.Optimus"
@@ -1937,65 +1803,18 @@ rd /s /q "C:\Nvidia\GFExperience\swiftshader"
  
 rd /s /q "C:\Nvidia\GFExperience\www"
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-:nv11
+
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Acceleration.Level" /t REG_DWORD /d "0" /f
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-:nv12
+
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d "1" /f
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-:nv9
+
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d "1" /f
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
 
-:nv10
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "DisableWriteCombining" /t REG_DWORD /d "1" /f
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-:nv6
 
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrLevel" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay" /t REG_DWORD /d "0" /f
@@ -2005,48 +1824,11 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrLimit
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrLimitTime" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrTestMode" /t REG_DWORD /d "0" /f
 
-
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-
-:nv15
 Reg.exe add "HKLM\System\CurrentControlSet\Control\Class{4d36e968-e325-11ce-bfc1-08002be10318}" /v "PowerMizerEnable" /t REG_DWORD /d "1" /f 
 Reg.exe add "HKLM\System\CurrentControlSet\Control\Class{4d36e968-e325-11ce-bfc1-08002be10318}" /v "PowerMizerLevel" /t REG_DWORD /d "1" /f 
 Reg.exe add "HKLM\System\CurrentControlSet\Control\Class{4d36e968-e325-11ce-bfc1-08002be10318}" /v "PowerMizerLevelAC" /t REG_DWORD /d "1" /f 
 Reg.exe add "HKLM\System\CurrentControlSet\Control\Class{4d36e968-e325-11ce-bfc1-08002be10318}" /v "PerfLevelSrc" /t REG_DWORD /d "8738" /f 
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-
-:nv3
-start "" /wait "C:\exm\NvidiaProfileInspector\nvidiaProfileInspector.exe" "C:\exm\NvidiaProfileInspector\EXM_Premium_NVPI_Proifle_V3.nip"
-
-
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-
-:nv1
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d "0" /f
@@ -2058,17 +1840,7 @@ schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80
 schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}"
 schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}"
 schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}"
-echo.
-echo.
-echo.
-echo.                                              %b%"I═══════════════════════════════════════════════════════I"
-echo.                                                    %w%  Operation Completed, Press any key to continue...
-echo.                                              %b%"I═══════════════════════════════════════════════════════I"
-pause > nul
-cls
-goto :nv
 
-:nv5
 for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID') do set "str=%%i" (
 echo Del GPU Device Priority
 Reg.exe add "HKLM\System\CurrentControlSet\Enum\%%i\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /f
@@ -2078,19 +1850,7 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Enum\%%i\Device Parameters\Interrupt 
 timeout /t 1 /nobreak > NUL
 echo Enable MSI Mode on GPU if supported
 Reg.exe add "HKLM\System\CurrentControlSet\Enum\%%i\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d "1" /f
-timeout /t 1 /nobreak > NUL
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-
-:nv4
 for /f %%f in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PCI\VEN_"') do (
 	for /f "tokens=3" %%b in ('reg query "HKLM\SYSTEM\ControlSet001\Enum\%%f" /v "Driver"') do (
 		for /f %%f in ('echo %%b ^| findstr "{"') do (
@@ -2099,17 +1859,6 @@ for /f %%f in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PC
                 )
              )
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
-
-:nv7
 			 for /f %%m in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PCI\VEN_"') do (
 	for /f "tokens=3" %%a in ('reg query "HKLM\SYSTEM\ControlSet001\Enum\%%m" /v "Driver"') do (
 		for /f %%m in ('echo %%a ^| findstr "{"') do (
@@ -2117,17 +1866,7 @@ goto :nv
                    )
                 )
              )
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
 
-:nv2
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "QosManagesIdleProcessors" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "InitialUnparkCount" /t REG_DWORD /d "100" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HighPerformance" /t REG_DWORD /d "1" /f
@@ -2140,19 +1879,7 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v 
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d "0" /f
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
 
-
-
-:nv14
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "TCCSupported" /t REG_DWORD /d "0" /f
 Reg.exe add "HKCU\SOFTWARE\NVIDIA Corporation\Global\NVTweak\Devices\509901423-0\Color" /v "NvCplUseColorCorrection" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "PlatformSupportMiracast" /t REG_DWORD /d "0" /f
@@ -2208,18 +1935,7 @@ Reg.exe add "HKLM\SYSTEM\ControlSet001\Services\nvlddmkm" /v "DisableCudaContext
 
 
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
 
-
-:nv16
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "D3PCLatency" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "F1TransitionLatency" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "LOWLATENCY" /t REG_DWORD /d "1" /f
@@ -2241,23 +1957,9 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMaxUs" /t REG_DWORD /d "1" /f
 
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :menu
-
-
-:nv8
-echo Disabling All preemptions
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisablePreemption" /t Reg_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableCudaContextPreemption" /t Reg_DWORD /d "1" /f
-    for /f %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}" /s /v "DriverDesc"^| findstr "HKEY AMD ATI"') do if /i "%%i" neq "DriverDesc" (set "REGPATH_AMD=%%i") else Reg.exe add "!REGPATH_AMD!" /v "KMD_EnableComputePreemption" /t REG_DWORD /d "0" /f 
-)
+
 
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Services\nvlddmkm" /v "EnableMidGfxPreemption" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Services\nvlddmkm" /v "EnableMidGfxPreemptionVGPU" /t REG_DWORD /d "0" /f
@@ -2314,27 +2016,7 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableCudaContextPreemption" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisablePreemptionOnS3S4" /t REG_DWORD /d "1" /f
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :nv
 
-
-
-:amdgpu
-cls
-chcp 437 > nul
-powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('ONLY DO THESE IF YOU HAVE AN AMD GPU', 'Exm Tweaking Utility', 'Ok', [System.Windows.Forms.MessageBoxIcon]::Information);}"
-chcp 65001 > nul
-SET /P AREYOUSURE=Only do these on an amd gpu, type yes if you have one, no if you dont (Yes/No)?
-IF /I "%AREYOUSURE%" NEQ "Yes" cls & GOTO :amdski
-cls
-:amdski
 
 for /f %%w in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}" /s /v "DriverDesc"^| findstr "HKEY AMD ATI"') do if /i "%%w" neq "DriverDesc" (set "REGPATH_AMD=%%w")
             Reg.exe add "!REGPATH_AMD!" /v "AsicOnLowPower" /t REG_DWORD /d "0" /f
@@ -2412,7 +2094,7 @@ Reg.exe add "%REGPATH_AMD%\UMD" /v "TFQ" /t Reg_BINARY /d "3200" /f
 Reg.exe add "%REGPATH_AMD%\DAL2_DATA__2_0\DisplayPath_4\EDID_D109_78E9\Option" /v "ProtectionControl" /t Reg_BINARY /d "0100000001000000" /f
 )
 
-timeout /t 1 /nobreak > NUL
+
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableVceSwClockGating" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUvdClockGating" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableVCEPowerGating" /t REG_DWORD /d "0" /f
@@ -2515,25 +2197,13 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ShaderCache" /t REG_BINARY /d "3200" /f
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /t REG_DWORD /d "0" /f
 
-echo.
-echo.
-echo.
-echo.                                              %b%╔═══════════════════════════════════════════════════════╗
-echo.                                              %b%║  %w%  Operation Completed, Press any key to continue...  %b%║
-echo.                                              %b%╚═══════════════════════════════════════════════════════╝
-pause > nul
-cls
-goto :gpu
-
-
-:intelgpu
 chcp 437 > nul
 powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('ONLY DO THESE IF YOU HAVE AN INTEL GPU', 'Exm Tweaking Utility', 'Ok', [System.Windows.Forms.MessageBoxIcon]::Information);}"
 chcp 65001 > nul
 cls
 SET /P AREYOUSURE=Only do these on an INTEL gpu, type yes if you have one, no if you dont (Yes/No)?
 IF /I "%AREYOUSURE%" NEQ "Yes" cls & GOTO :intelski
-:intelski
+
 
 for /f %%t in ('Reg query "HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}" /t REG_SZ /s /e /f "Intel" ^| findstr "HKEY"') do (
 
