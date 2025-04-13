@@ -1824,31 +1824,7 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "Transmit
 
 
 
-cls
-cd %tmp%
 
-echo Downloading Devmanview [...]
-if not exist "%tmp%\devmanview.exe" curl -g -L -# -o "%tmp%\devmanview.exe" "https://github.com/UnLovedCookie/EchoX/raw/main/Files/DevManView.exe"
-echo Downloading EmptyStandbyList [...]
-if not exist "%tmp%\EmptyStandbyList.exe" curl -g -L -# -o "%tmp%\EmptyStandbyList.exe" "https://github.com/UnLovedCookie/EchoX/raw/main/Files/EmptyStandbyList.exe"
-cls
-
-::Restart Explorer
-echo Refreshing Explorer [...]
-taskkill /f /im explorer.exe > && start "" explorer.exe
-
-::Refresh Internet
-echo Refreshing Internet [...]
-::Release the current IP address obtains a new one.
-echo ipconfig /release
-echo ipconfig /renew
-::Flush the DNS and Begin manual dynamic registration for DNS names.
-echo ipconfig /flushdns
-echo ipconfig /registerdns
-start "" /D "%tmp%" NSudo.exe -U:T -P:E -M:S -ShowWindowMode:Hide cmd /c "%tmp%\RefreshNet.bat"
-
-::Update Group Policy
-gpupdate /force >nul
 
 Reg.exe add "HKLM\System\CurrentControlSet\Services\VxD\BIOS" /v "CPUPriority" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\System\CurrentControlSet\Services\VxD\BIOS" /v "FastDRAM" /t REG_DWORD /d "1" /f
