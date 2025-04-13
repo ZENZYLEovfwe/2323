@@ -2005,7 +2005,7 @@ fsutil behavior set memoryusage 2
 
 
 
-@echo off
+
 
 cls
 cd %tmp%
